@@ -1,0 +1,33 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Recommendation System</title>
+</head>
+<body>
+    <h1>Movie Recommendation System</h1>
+    <form action="/recommend" method="post">
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" name="userId">
+        <input type="submit" value="Get Recommendations">
+    </form>
+    <div id="recommendations"></div>
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userId = document.getElementById('userId').value;
+            const response = await fetch('/recommend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId }),
+            });
+            const recommendations = await response.json();
+            const recommendationsDiv = document.getElementById('recommendations');
+            recommendationsDiv.innerHTML = `<h2>Top Recommendations:</h2><ul>${recommendations.map(movie => `<li>${movie}</li>`).join('')}</ul>`;
+        });
+    </script>
+</body>
+</html>
